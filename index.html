@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>校园大逃亡</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 房间大厅 -->
+    <div id="lobbyScreen" class="screen">
+        <div class="lobby-container">
+            <h1>校园大逃亡</h1>
+            <div class="input-group">
+                <input type="text" id="playerName" placeholder="输入昵称" maxlength="10">
+            </div>
+            <div class="button-group">
+                <button id="createRoomBtn" class="btn btn-primary">创建房间</button>
+                <div class="join-group">
+                    <input type="text" id="roomCodeInput" placeholder="房间码" maxlength="6">
+                    <button id="joinRoomBtn" class="btn btn-secondary">加入房间</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 等待房间 -->
+    <div id="waitingRoom" class="screen" style="display: none;">
+        <div class="waiting-container">
+            <h2>房间: <span id="roomCodeDisplay"></span></h2>
+            <div id="playerList" class="player-list"></div>
+            <button id="startGameBtn" class="btn btn-primary" style="display: none;">开始游戏</button>
+        </div>
+    </div>
+
+    <!-- 身份选择界面 -->
+    <div id="roleSelection" class="screen" style="display: none;">
+        <div class="role-selection-container">
+            <h2>选择你的身份</h2>
+            <div class="role-cards">
+                <!-- 羊角色卡片 -->
+                <div class="role-card sheep-card" id="selectSheep">
+                    <div class="role-icon">🐑</div>
+                    <h3>小羊</h3>
+                    <div class="role-team">蓝队</div>
+                    <ul class="role-abilities">
+                        <li>✓ 可以自由移动和躲藏</li>
+                        <li>✓ 可以解救被捆绑的队友</li>
+                        <li>✓ 使用道具增强能力</li>
+                        <li>✓ 坚持到时间结束即胜利</li>
+                    </ul>
+                    <div class="role-tip">适合喜欢策略和团队合作的玩家</div>
+                </div>
+                
+                <!-- 狼角色卡片 -->
+                <div class="role-card wolf-card" id="selectWolf">
+                    <div class="role-icon">🐺</div>
+                    <h3>狼人</h3>
+                    <div class="role-team">红队</div>
+                    <ul class="role-abilities">
+                        <li>✓ 使用钩子抓住小羊</li>
+                        <li>✓ 加速技能快速追击</li>
+                        <li>✓ 感染小羊壮大队伍</li>
+                        <li>✓ 在时间内抓住所有羊即胜利</li>
+                    </ul>
+                    <div class="role-tip">适合喜欢主动进攻的玩家</div>
+                </div>
+            </div>
+            <button id="confirmRoleBtn" class="btn btn-primary" disabled>确认选择</button>
+        </div>
+    </div>
+
+    <!-- 游戏主界面 -->
+    <div id="gameContainer" style="display: none;">
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- 左摇杆（移动） -->
+        <div id="leftJoystick" class="joystick-container"></div>
+        
+        <!-- 右摇杆（瞄准） -->
+        <div id="rightJoystick" class="joystick-container"></div>
+        
+        <!-- UI容器 -->
+        <div id="uiContainer">
+            <div id="timer" class="timer-display">30s</div>
+            <div id="roleIndicator" class="role-indicator">羊</div>
+            <div id="livesDisplay" class="lives-display">❤️❤️</div>
+        </div>
+        
+        <!-- 技能按钮（狼人专用） -->
+        <div id="wolfSkills" class="skill-buttons" style="display: none;">
+            <button id="speedBoostBtn" class="skill-btn">
+                <span class="skill-icon">⚡</span>
+                <span class="cooldown-overlay" id="speedCooldown"></span>
+            </button>
+        </div>
+        
+        <!-- 解救按钮（小羊专用） -->
+        <div id="rescueButton" class="rescue-btn-container" style="display: none;">
+            <button id="rescueBtn" class="btn btn-rescue">
+                <span>解救队友</span>
+                <div class="progress-bar" id="rescueProgress"></div>
+            </button>
+        </div>
+        
+        <!-- 道具提示 -->
+        <div id="itemNotification" class="item-notification" style="display: none;"></div>
+        
+        <!-- 门交互按钮 -->
+        <div id="doorInteraction" class="door-btn-container" style="display: none;">
+            <button id="openDoorBtn" class="btn btn-door">开门</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.9.0/dist/nipplejs.min.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>

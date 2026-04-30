@@ -1,0 +1,545 @@
+/* 基础样式 */
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-family: 'Arial', sans-serif;
+}
+
+/* 屏幕容器 */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* 大厅界面 */
+.lobby-container {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.lobby-container h1 {
+    margin: 0 0 30px 0;
+    color: #333;
+    font-size: 32px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.join-group {
+    display: flex;
+    gap: 10px;
+}
+
+.join-group input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+/* 按钮样式 */
+.btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background: #e0e0e0;
+}
+
+/* 等待房间 */
+.waiting-container {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+.waiting-container h2 {
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+.player-list {
+    margin: 20px 0;
+    min-height: 200px;
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.player-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+.player-role {
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.player-role.sheep {
+    background: #4169E1;
+    color: white;
+}
+
+.player-role.wolf {
+    background: #DC143C;
+    color: white;
+}
+
+/* 游戏容器 */
+#gameContainer {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: #87CEEB;
+}
+
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* 摇杆容器 */
+.joystick-container {
+    position: absolute;
+    bottom: 30px;
+    width: 120px;
+    height: 120px;
+    z-index: 100;
+    opacity: 0.7;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.2);
+}
+
+#leftJoystick {
+    left: 30px;
+}
+
+#rightJoystick {
+    right: 30px;
+}
+
+/* UI容器 */
+#uiContainer {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.timer-display {
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.role-indicator {
+    padding: 5px 15px;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.5);
+    display: inline-block;
+}
+
+.lives-display {
+    margin-top: 10px;
+    font-size: 20px;
+}
+
+/* 技能按钮 */
+.skill-buttons {
+    position: absolute;
+    right: 30px;
+    bottom: 180px;
+    z-index: 100;
+}
+
+.skill-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid white;
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.skill-btn:active {
+    transform: scale(0.95);
+}
+
+.skill-icon {
+    position: relative;
+    z-index: 2;
+}
+
+.cooldown-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 16px;
+    z-index: 1;
+}
+
+/* 解救按钮 */
+.rescue-btn-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 150;
+}
+
+.btn-rescue {
+    width: 200px;
+    height: 60px;
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 5px;
+    background: #FFD700;
+    transition: width 0.1s;
+}
+
+/* 道具通知 */
+.item-notification {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    z-index: 200;
+    animation: fadeInOut 3s;
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0; }
+    10%, 90% { opacity: 1; }
+}
+
+/* 门交互按钮 */
+.door-btn-container {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+}
+
+.btn-door {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+    color: white;
+    border: 3px solid white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* 防止iOS Safari缩放 */
+input[type="text"], textarea {
+    font-size: 16px !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .lobby-container, .waiting-container {
+        padding: 20px;
+    }
+    
+    .lobby-container h1 {
+        font-size: 24px;
+    }
+    
+    .joystick-container {
+        width: 100px;
+        height: 100px;
+    }
+    
+    #leftJoystick {
+        left: 20px;
+        bottom: 20px;
+    }
+    
+    #rightJoystick {
+        right: 20px;
+        bottom: 20px;
+    }
+}
+
+/* 身份选择界面 */
+.role-selection-container {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    text-align: center;
+    max-width: 900px;
+    width: 95%;
+}
+
+.role-selection-container h2 {
+    margin: 0 0 30px 0;
+    color: #333;
+    font-size: 32px;
+}
+
+.role-cards {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.role-card {
+    flex: 1;
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.role-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+    transition: opacity 0.3s;
+}
+
+.role-card:hover::before {
+    opacity: 0.2;
+}
+
+.sheep-card {
+    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+}
+
+.sheep-card::before {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+}
+
+.sheep-card.selected {
+    border-color: #1976D2;
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.5);
+}
+
+.wolf-card {
+    background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+}
+
+.wolf-card::before {
+    background: linear-gradient(135deg, #F44336 0%, #D32F2F 100%);
+}
+
+.wolf-card.selected {
+    border-color: #D32F2F;
+    box-shadow: 0 0 20px rgba(244, 67, 54, 0.5);
+}
+
+.role-icon {
+    font-size: 80px;
+    margin-bottom: 15px;
+}
+
+.role-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 28px;
+}
+
+.sheep-card h3 {
+    color: #1976D2;
+}
+
+.wolf-card h3 {
+    color: #D32F2F;
+}
+
+.role-team {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.sheep-card .role-team {
+    background: #1976D2;
+    color: white;
+}
+
+.wolf-card .role-team {
+    background: #D32F2F;
+    color: white;
+}
+
+.role-abilities {
+    text-align: left;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.role-abilities li {
+    padding: 8px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.role-tip {
+    font-size: 13px;
+    color: #888;
+    font-style: italic;
+    padding: 10px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 8px;
+}
+
+#confirmRoleBtn {
+    padding: 15px 50px;
+    font-size: 18px;
+}
+
+#confirmRoleBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .role-cards {
+        flex-direction: column;
+    }
+    
+    .role-card {
+        max-width: 100%;
+    }
+    
+    .role-icon {
+        font-size: 60px;
+    }
+    
+    .role-card h3 {
+        font-size: 24px;
+    }
+}
