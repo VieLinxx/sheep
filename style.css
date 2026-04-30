@@ -1,545 +1,927 @@
-/* 基础样式 */
-body, html {
-    margin: 0;
-    padding: 0;
+/* ==================== 基础重置 ==================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+    width: 100%; height: 100%;
     overflow: hidden;
-    width: 100%;
-    height: 100%;
-    touch-action: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Microsoft YaHei', 'PingFang SC', 'Arial', sans-serif;
+    background: #1a1a2e;
+    user-select: none; -webkit-user-select: none;
 }
-
-/* 屏幕容器 */
 .screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: none;
+    overflow: hidden;
+}
+.screen.active { display: block; }
+
+/* ==================== 1. 开始界面 ==================== */
+#screen-start {
+    background: linear-gradient(180deg, #4FC3F7 0%, #81D4FA 40%, #A5D6A7 70%, #66BB6A 100%);
+    position: relative;
+}
+.bg-decoration {
+    position: absolute; inset: 0;
+    pointer-events: none; overflow: hidden;
+}
+.cloud {
+    position: absolute; background: rgba(255,255,255,0.85);
+    border-radius: 50px;
+}
+.cloud::before, .cloud::after {
+    content: ''; position: absolute; background: rgba(255,255,255,0.85); border-radius: 50%;
+}
+.cloud-1 { width: 120px; height: 40px; top: 8%; left: 10%; animation: float 8s ease-in-out infinite; }
+.cloud-1::before { width: 50px; height: 50px; top: -25px; left: 15px; }
+.cloud-1::after { width: 60px; height: 45px; top: -20px; left: 50px; }
+.cloud-2 { width: 100px; height: 35px; top: 15%; right: 15%; animation: float 10s ease-in-out infinite 2s; }
+.cloud-2::before { width: 45px; height: 45px; top: -22px; left: 12px; }
+.cloud-2::after { width: 55px; height: 40px; top: -18px; left: 40px; }
+.cloud-3 { width: 140px; height: 45px; top: 5%; left: 60%; animation: float 9s ease-in-out infinite 1s; }
+.cloud-3::before { width: 55px; height: 55px; top: -28px; left: 20px; }
+.cloud-3::after { width: 65px; height: 50px; top: -22px; left: 60px; }
+@keyframes float {
+    0%, 100% { transform: translateX(0) translateY(0); }
+    50% { transform: translateX(20px) translateY(-10px); }
+}
+.sun {
+    position: absolute; top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, #FFF176 0%, transparent 70%);
+    border-radius: 50%; opacity: 0.6;
+}
+.building-left {
+    position: absolute; bottom: 25%; left: -20px;
+    width: 180px; height: 250px;
+    background: linear-gradient(180deg, #FFCC80 0%, #FFB74D 100%);
+    border-radius: 10px 10px 0 0;
+    box-shadow: inset -20px 0 0 rgba(0,0,0,0.1);
+}
+.building-left::before {
+    content: ''; position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 50px solid transparent; border-right: 50px solid transparent; border-bottom: 50px solid #EF5350;
+}
+.building-right {
+    position: absolute; bottom: 25%; right: -30px;
+    width: 220px; height: 300px;
+    background: linear-gradient(180deg, #CE93D8 0%, #BA68C8 100%);
+    border-radius: 10px 10px 0 0;
+    box-shadow: inset 20px 0 0 rgba(0,0,0,0.1);
+}
+.building-right::before {
+    content: ''; position: absolute; top: -30px; left: 30px;
+    width: 40px; height: 80px; background: #EF5350; border-radius: 5px 5px 0 0;
+}
+.track {
+    position: absolute; bottom: 15%; left: 0; right: 0;
+    height: 120px;
+    background: repeating-linear-gradient(
+        90deg,
+        #E57373 0px, #E57373 80px,
+        #FFF 80px, #FFF 85px,
+        #E57373 85px, #E57373 165px,
+        #FFF 165px, #FFF 170px
+    );
+    transform: perspective(200px) rotateX(40deg);
+    transform-origin: bottom;
+}
+.grass {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 18%; background: linear-gradient(180deg, #81C784 0%, #4CAF50 100%);
+}
+.grass::before {
+    content: ''; position: absolute; top: -15px; left: 0; right: 0;
+    height: 30px;
+    background: radial-gradient(ellipse at center, #81C784 0%, transparent 70%);
 }
 
-/* 大厅界面 */
-.lobby-container {
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
+/* 角落按钮 */
+.corner-btn {
+    position: absolute; z-index: 10;
+    background: rgba(255,255,255,0.25); backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.4); border-radius: 15px;
+    padding: 10px 18px; color: #fff; font-size: 14px; font-weight: bold;
+    cursor: pointer; transition: all 0.3s;
+}
+.corner-btn:hover { background: rgba(255,255,255,0.4); transform: scale(1.05); }
+.top-left { top: 20px; left: 20px; }
+.top-right { top: 20px; right: 20px; }
+
+/* 开始界面内容 */
+.start-content {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -55%);
+    text-align: center; z-index: 5;
+    display: flex; flex-direction: column; align-items: center; gap: 25px;
+}
+.game-title { margin-bottom: 10px; }
+.title-main {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.title-text {
+    font-size: 56px; font-weight: 900;
+    color: #fff;
+    text-shadow:
+        0 0 0 4px #1976D2,
+        0 4px 0 #1976D2, 0 -4px 0 #1976D2, 4px 0 0 #1976D2, -4px 0 0 #1976D2,
+        0 6px 10px rgba(0,0,0,0.3);
+    -webkit-text-stroke: 3px #1565C0;
+    letter-spacing: 4px;
+}
+.title-sheep, .title-wolf { font-size: 48px; animation: bounce 2s infinite; }
+.title-wolf { animation-delay: 0.5s; }
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+.title-sub {
+    display: inline-block;
+    margin-top: 10px; padding: 6px 30px;
+    background: linear-gradient(180deg, #8D6E63 0%, #5D4037 100%);
+    color: #FFECB3; font-size: 22px; font-weight: bold;
+    border-radius: 25px; border: 3px solid #FFECB3;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.diamond { color: #FFD54F; margin: 0 8px; }
+
+.nickname-box {
+    position: relative; display: flex; align-items: center;
+    background: rgba(255,255,255,0.9); border-radius: 30px;
+    padding: 5px 5px 5px 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    width: 320px;
+}
+#nicknameInput {
+    flex: 1; border: none; background: transparent;
+    font-size: 16px; color: #333; outline: none;
+}
+#nicknameInput::placeholder { color: #999; }
+.dice-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #FFCC80, #FF8A65);
+    border: none; font-size: 20px; cursor: pointer;
+    transition: transform 0.3s;
+}
+.dice-btn:hover { transform: rotate(180deg); }
+
+.start-buttons { display: flex; flex-direction: column; gap: 15px; width: 280px; }
+.btn-main {
+    position: relative; padding: 16px 40px;
+    border: none; border-radius: 35px;
+    font-size: 22px; font-weight: bold; color: #fff;
+    cursor: pointer; overflow: hidden;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.2);
+    transition: all 0.1s;
+}
+.btn-main:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.2), 0 4px 10px rgba(0,0,0,0.2);
+}
+.btn-blue {
+    background: linear-gradient(180deg, #42A5F5 0%, #1E88E5 50%, #1565C0 100%);
+    border: 3px solid #81D4FA;
+}
+.btn-yellow {
+    background: linear-gradient(180deg, #FFD54F 0%, #FFB300 50%, #FF8F00 100%);
+    border: 3px solid #FFECB3; color: #5D4037;
+}
+.btn-shine {
+    position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shine 3s infinite;
+}
+@keyframes shine {
+    0% { left: -100%; }
+    50%, 100% { left: 100%; }
 }
 
-.lobby-container h1 {
-    margin: 0 0 30px 0;
-    color: #333;
-    font-size: 32px;
+.bottom-bar {
+    position: absolute; bottom: 20px; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding: 0 20px; z-index: 10;
 }
-
-.input-group {
-    margin-bottom: 20px;
+.age-rating {
+    background: linear-gradient(135deg, #42A5F5, #1976D2);
+    color: #fff; text-align: center; padding: 8px 12px;
+    border-radius: 10px; font-size: 14px; font-weight: bold;
+    border: 2px solid rgba(255,255,255,0.5);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
-
-.input-group input {
-    width: 100%;
-    padding: 15px;
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    font-size: 16px;
-    box-sizing: border-box;
-    transition: border-color 0.3s;
-}
-
-.input-group input:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-.button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.join-group {
-    display: flex;
-    gap: 10px;
-}
-
-.join-group input {
-    flex: 1;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    font-size: 14px;
-}
-
-/* 按钮样式 */
-.btn {
-    padding: 15px 30px;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
+.age-rating small { font-size: 10px; font-weight: normal; opacity: 0.9; }
+.agreement {
+    display: flex; align-items: center; gap: 8px;
+    color: #fff; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,0.3);
     cursor: pointer;
+}
+.agreement input { display: none; }
+.checkmark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; background: #FFD54F;
+    border-radius: 6px; color: #5D4037; font-weight: bold; font-size: 14px;
+}
+.agreement a { color: #FFECB3; text-decoration: underline; }
+
+/* ==================== 2. 等待房间 ==================== */
+#screen-room {
+    background: linear-gradient(180deg, #4FC3F7 0%, #81D4FA 50%, #C8E6C9 100%);
+    position: relative;
+}
+.room-bg {
+    position: absolute; inset: 0;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.2) 0%, transparent 40%);
+}
+.room-panel {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 90%; max-width: 900px; height: 85%;
+    background: linear-gradient(180deg, rgba(33,150,243,0.85) 0%, rgba(25,118,210,0.9) 100%);
+    border-radius: 25px; border: 3px solid rgba(255,255,255,0.4);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.3);
+    padding: 20px; display: flex; flex-direction: column; align-items: center;
+    backdrop-filter: blur(10px);
+}
+.back-btn {
+    position: absolute; top: 15px; left: 15px;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4);
+    color: #fff; font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
+.room-header-small {
+    position: absolute; top: 15px; left: 70px;
+    color: #fff; font-size: 16px; font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.room-header-small small { font-size: 12px; opacity: 0.9; }
+.room-settings-btn {
+    position: absolute; top: 15px; right: 15px;
+    background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4);
+    color: #fff; padding: 8px 16px; border-radius: 20px;
+    cursor: pointer; font-size: 14px;
+}
+.room-title-bar {
+    margin-top: 50px; margin-bottom: 20px;
+    padding: 10px 50px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+    border: 2px solid rgba(255,255,255,0.3); border-radius: 30px;
+    color: #fff; font-size: 28px; font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.room-body {
+    display: flex; gap: 20px; width: 100%; flex: 1;
+}
+.player-list-panel, .room-info-panel {
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px; border: 2px solid rgba(255,255,255,0.2);
+    padding: 15px;
+}
+.player-list-panel { flex: 1.2; }
+.room-info-panel { flex: 0.8; }
+.panel-header {
+    color: #fff; font-size: 16px; font-weight: bold;
+    margin-bottom: 15px; padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+.player-slots { display: flex; flex-direction: column; gap: 8px; }
+.player-slot {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.2); border-radius: 15px;
+    padding: 10px 15px;
     transition: all 0.3s;
 }
-
-.btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+.player-slot.empty { opacity: 0.5; }
+.player-slot-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(255,255,255,0.3); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: bold;
 }
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+.player-slot-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #FFCC80, #FF8A65);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; border: 2px solid rgba(255,255,255,0.5);
 }
-
-.btn-secondary {
-    background: #f0f0f0;
-    color: #333;
+.player-slot-info { flex: 1; }
+.player-slot-name { color: #fff; font-size: 15px; font-weight: bold; }
+.player-slot-status {
+    font-size: 12px; margin-top: 2px;
 }
-
-.btn-secondary:hover {
-    background: #e0e0e0;
+.player-slot-status.ready { color: #69F0AE; }
+.player-slot-status.waiting { color: rgba(255,255,255,0.6); }
+.tag-host {
+    background: linear-gradient(135deg, #FFD54F, #FF8F00);
+    color: #5D4037; padding: 2px 8px; border-radius: 10px;
+    font-size: 11px; font-weight: bold;
 }
-
-/* 等待房间 */
-.waiting-container {
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    text-align: center;
-    max-width: 500px;
-    width: 90%;
+.tag-crown { color: #FFD54F; font-size: 16px; margin-right: 4px; }
+.player-slot-team {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; border: 2px solid rgba(255,255,255,0.4);
 }
+.team-wolf { background: linear-gradient(135deg, #EF5350, #C62828); }
+.team-sheep { background: linear-gradient(135deg, #42A5F5, #1565C0); }
 
-.waiting-container h2 {
-    margin: 0 0 20px 0;
-    color: #333;
+.room-info-panel .info-item { margin-bottom: 20px; }
+.info-label { color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 8px; }
+.mode-box {
+    background: rgba(255,255,255,0.2); border-radius: 15px;
+    padding: 12px; color: #fff; font-size: 15px; font-weight: bold;
+    border: 1px solid rgba(255,255,255,0.3);
 }
-
-.player-list {
-    margin: 20px 0;
-    min-height: 200px;
-    border: 2px dashed #ddd;
-    border-radius: 10px;
-    padding: 20px;
+.room-code-box {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(0,0,0,0.3); border-radius: 15px;
+    padding: 12px 20px;
 }
-
-.player-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin: 5px 0;
-    background: #f9f9f9;
-    border-radius: 5px;
+#roomCode {
+    color: #FFD54F; font-size: 36px; font-weight: bold;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3); letter-spacing: 4px;
+    flex: 1;
 }
-
-.player-role {
-    padding: 3px 10px;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.player-role.sheep {
-    background: #4169E1;
-    color: white;
-}
-
-.player-role.wolf {
-    background: #DC143C;
-    color: white;
-}
-
-/* 游戏容器 */
-#gameContainer {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    background-color: #87CEEB;
-}
-
-#gameCanvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
-/* 摇杆容器 */
-.joystick-container {
-    position: absolute;
-    bottom: 30px;
-    width: 120px;
-    height: 120px;
-    z-index: 100;
-    opacity: 0.7;
-    border-radius: 50%;
-    background-color: rgba(0,0,0,0.2);
-}
-
-#leftJoystick {
-    left: 30px;
-}
-
-#rightJoystick {
-    right: 30px;
-}
-
-/* UI容器 */
-#uiContainer {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 100;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-.timer-display {
-    margin-bottom: 10px;
-    font-size: 28px;
-}
-
-.role-indicator {
-    padding: 5px 15px;
-    border-radius: 20px;
-    background: rgba(0,0,0,0.5);
-    display: inline-block;
-}
-
-.lives-display {
-    margin-top: 10px;
-    font-size: 20px;
-}
-
-/* 技能按钮 */
-.skill-buttons {
-    position: absolute;
-    right: 30px;
-    bottom: 180px;
-    z-index: 100;
-}
-
-.skill-btn {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 3px solid white;
-    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-.skill-btn:active {
-    transform: scale(0.95);
-}
-
-.skill-icon {
-    position: relative;
-    z-index: 2;
-}
-
-.cooldown-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 16px;
-    z-index: 1;
-}
-
-/* 解救按钮 */
-.rescue-btn-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 150;
-}
-
-.btn-rescue {
-    width: 200px;
-    height: 60px;
-    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-    color: white;
-    border: none;
-    border-radius: 30px;
+.copy-btn {
+    background: rgba(255,255,255,0.2); border: none;
+    border-radius: 10px; padding: 8px; cursor: pointer;
     font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
+}
+.room-hint { color: rgba(255,255,255,0.7); font-size: 13px; text-align: center; margin-top: 10px; }
+
+.btn-start-game {
+    margin-top: 15px; padding: 16px 80px;
+    background: linear-gradient(180deg, #FFD54F 0%, #FF8F00 100%);
+    border: 3px solid #FFECB3; border-radius: 35px;
+    color: #5D4037; font-size: 24px; font-weight: bold;
+    cursor: pointer; box-shadow: 0 6px 0 rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.2);
+    transition: all 0.1s;
+}
+.btn-start-game:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
+
+.corner-action {
+    position: absolute; bottom: 20px; z-index: 10;
+    background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.4); border-radius: 50%;
+    width: 70px; height: 70px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #fff; font-size: 11px; cursor: pointer;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.corner-action.bottom-left { left: 20px; }
+.corner-action.bottom-right { right: 20px; }
+
+/* ==================== 3. 游戏主界面 ==================== */
+#screen-game { background: #2d5016; position: relative; }
+#gameCanvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; display: block;
 }
 
-.progress-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0%;
-    height: 5px;
-    background: #FFD700;
-    transition: width 0.1s;
-}
-
-/* 道具通知 */
-.item-notification {
-    position: absolute;
-    top: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.8);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 16px;
-    z-index: 200;
-    animation: fadeInOut 3s;
-}
-
-@keyframes fadeInOut {
-    0%, 100% { opacity: 0; }
-    10%, 90% { opacity: 1; }
-}
-
-/* 门交互按钮 */
-.door-btn-container {
-    position: absolute;
-    right: 30px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 100;
-}
-
-.btn-door {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-    color: white;
-    border: 3px solid white;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-/* 防止iOS Safari缩放 */
-input[type="text"], textarea {
-    font-size: 16px !important;
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-    .lobby-container, .waiting-container {
-        padding: 20px;
-    }
-    
-    .lobby-container h1 {
-        font-size: 24px;
-    }
-    
-    .joystick-container {
-        width: 100px;
-        height: 100px;
-    }
-    
-    #leftJoystick {
-        left: 20px;
-        bottom: 20px;
-    }
-    
-    #rightJoystick {
-        right: 20px;
-        bottom: 20px;
-    }
-}
-
-/* 身份选择界面 */
-.role-selection-container {
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+.game-ui { position: absolute; z-index: 100; }
+.game-ui.top-left { top: 15px; left: 15px; }
+.game-ui.top-center {
+    top: 15px; left: 50%; transform: translateX(-50%);
     text-align: center;
-    max-width: 900px;
-    width: 95%;
+}
+.game-ui.top-right { top: 15px; right: 15px; text-align: right; }
+.game-ui.bottom-left { bottom: 20px; left: 20px; }
+.game-ui.bottom-right { bottom: 20px; right: 20px; }
+
+/* 阵营面板 */
+#teamPanel {
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+    border-radius: 15px; border: 1px solid rgba(255,255,255,0.2);
+    padding: 12px; min-width: 180px;
+}
+.team-header {
+    display: flex; justify-content: space-between; align-items: center;
+    color: #fff; font-size: 14px; font-weight: bold;
+    padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.2);
+    margin-bottom: 8px;
+}
+.team-list { display: flex; flex-direction: column; gap: 6px; }
+.team-player {
+    display: flex; align-items: center; gap: 8px;
+    color: #fff; font-size: 13px;
+}
+.team-player-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, #FFCC80, #FF8A65);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; border: 1px solid rgba(255,255,255,0.3);
+}
+.team-player-signal {
+    margin-left: auto;
+    display: flex; gap: 2px; align-items: flex-end; height: 12px;
+}
+.signal-bar {
+    width: 3px; background: #69F0AE; border-radius: 1px;
+}
+.signal-bar:nth-child(1) { height: 4px; }
+.signal-bar:nth-child(2) { height: 8px; }
+.signal-bar:nth-child(3) { height: 12px; }
+
+/* 阶段倒计时 */
+.phase-name {
+    background: linear-gradient(180deg, #42A5F5, #1565C0);
+    color: #fff; padding: 6px 25px; border-radius: 15px;
+    font-size: 16px; font-weight: bold;
+    border: 2px solid rgba(255,255,255,0.3);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    margin-bottom: 5px;
+}
+.phase-timer {
+    background: linear-gradient(180deg, #1E88E5, #0D47A1);
+    border: 3px solid rgba(255,255,255,0.4); border-radius: 20px;
+    padding: 10px 40px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    display: inline-flex; align-items: baseline; gap: 5px;
+}
+.timer-num {
+    color: #fff; font-size: 48px; font-weight: 900;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    font-family: 'Arial Black', sans-serif;
+}
+.timer-unit { color: rgba(255,255,255,0.8); font-size: 20px; font-weight: bold; }
+.phase-hint {
+    margin-top: 5px; color: #fff; font-size: 14px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
-.role-selection-container h2 {
-    margin: 0 0 30px 0;
-    color: #333;
-    font-size: 32px;
+/* 右上角控件 */
+.ping { color: #69F0AE; font-size: 13px; margin-bottom: 8px; font-weight: bold; }
+.icon-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; font-size: 16px; cursor: pointer;
+    margin-bottom: 6px; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+}
+.icon-btn:hover { background: rgba(0,0,0,0.6); transform: scale(1.1); }
+.mini-map {
+    width: 120px; height: 120px; border-radius: 50%;
+    background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.3);
+    margin: 8px 0; position: relative; overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+#miniMapCanvas { width: 100%; height: 100%; border-radius: 50%; }
+.map-arrow {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    color: #42A5F5; font-size: 14px; text-shadow: 0 0 4px #000;
+    pointer-events: none;
+}
+.chat-btn { margin-top: 5px; }
+
+/* 左下角摇杆和按键提示 */
+.joystick-visual {
+    width: 120px; height: 120px; position: relative;
+    opacity: 0.6;
+}
+.joystick-base {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.3) 100%);
+    border: 2px solid rgba(255,255,255,0.3);
+}
+.joystick-stick {
+    position: absolute; top: 50%; left: 50%;
+    width: 50px; height: 50px; margin: -25px 0 0 -25px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+    border: 2px solid rgba(255,255,255,0.5);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    transition: transform 0.1s;
+}
+.key-hint {
+    margin-top: 10px; color: rgba(255,255,255,0.7);
+    font-size: 12px; text-align: center;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
-.role-cards {
-    display: flex;
-    gap: 30px;
-    justify-content: center;
+/* 奔跑按钮 */
+.run-btn {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.4);
+    color: #fff; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    cursor: pointer; backdrop-filter: blur(5px);
+    transition: all 0.2s;
+}
+.run-btn:active { transform: scale(0.95); background: rgba(0,0,0,0.6); }
+.run-icon { font-size: 32px; }
+.run-text { font-size: 13px; font-weight: bold; margin-top: 2px; }
+
+/* 被抓捕遮罩 */
+.capture-overlay {
+    position: absolute; inset: 0; z-index: 200;
+    background: radial-gradient(circle, rgba(183,28,28,0.4) 0%, rgba(0,0,0,0.85) 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    animation: capturePulse 2s infinite;
+}
+@keyframes capturePulse {
+    0%, 100% { background-color: rgba(0,0,0,0.3); }
+    50% { background-color: rgba(183,28,28,0.2); }
+}
+.capture-title {
+    color: #EF5350; font-size: 52px; font-weight: 900;
+    text-shadow: 0 0 20px rgba(239,83,80,0.5), 0 4px 8px rgba(0,0,0,0.5);
+    margin-bottom: 10px;
+}
+.capture-sub {
+    background: rgba(183,28,28,0.6); color: #fff;
+    padding: 8px 25px; border-radius: 20px;
+    font-size: 16px; border: 1px solid rgba(239,83,80,0.5);
     margin-bottom: 30px;
 }
-
-.role-card {
-    flex: 1;
-    max-width: 400px;
-    padding: 30px;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 3px solid transparent;
-    position: relative;
-    overflow: hidden;
-}
-
-.role-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0.1;
-    transition: opacity 0.3s;
-}
-
-.role-card:hover::before {
-    opacity: 0.2;
-}
-
-.sheep-card {
-    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
-}
-
-.sheep-card::before {
-    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
-}
-
-.sheep-card.selected {
-    border-color: #1976D2;
-    box-shadow: 0 0 20px rgba(33, 150, 243, 0.5);
-}
-
-.wolf-card {
-    background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
-}
-
-.wolf-card::before {
-    background: linear-gradient(135deg, #F44336 0%, #D32F2F 100%);
-}
-
-.wolf-card.selected {
-    border-color: #D32F2F;
-    box-shadow: 0 0 20px rgba(244, 67, 54, 0.5);
-}
-
-.role-icon {
-    font-size: 80px;
+.rescue-progress-box {
+    width: 400px; max-width: 80%;
+    background: rgba(0,0,0,0.6); border-radius: 15px;
+    padding: 15px 20px; border: 1px solid rgba(255,255,255,0.2);
     margin-bottom: 15px;
 }
-
-.role-card h3 {
-    margin: 0 0 10px 0;
-    font-size: 28px;
+.rescue-label { color: #fff; font-size: 16px; margin-bottom: 10px; }
+.rescue-bar-bg {
+    height: 12px; background: rgba(255,255,255,0.2); border-radius: 6px; overflow: hidden;
+}
+.rescue-bar-fill {
+    height: 100%; background: linear-gradient(90deg, #EF5350, #FF8A80);
+    border-radius: 6px; transition: width 0.2s;
+    box-shadow: 0 0 10px rgba(239,83,80,0.5);
+}
+.rescue-time { color: #fff; font-size: 14px; margin-top: 8px; text-align: right; }
+.capture-warning {
+    color: #EF5350; font-size: 14px;
+    text-shadow: 0 0 10px rgba(239,83,80,0.5);
+}
+.sos-btn-container {
+    position: absolute; bottom: 30px; right: 30px; z-index: 210;
+}
+.sos-btn {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: rgba(183,28,28,0.7); border: 3px solid #EF5350;
+    color: #fff; font-size: 13px; font-weight: bold;
+    cursor: pointer; animation: sosPulse 1s infinite;
+    box-shadow: 0 0 20px rgba(239,83,80,0.5);
+}
+@keyframes sosPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(239,83,80,0.5); }
+    50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(239,83,80,0.8); }
 }
 
-.sheep-card h3 {
-    color: #1976D2;
+/* ==================== 4. 结算界面 ==================== */
+#screen-result {
+    background: linear-gradient(180deg, #1a1a2e 0%, #2d132c 50%, #1a1a2e 100%);
+    position: relative; overflow-y: auto;
 }
-
-.wolf-card h3 {
-    color: #D32F2F;
+.result-bg {
+    position: fixed; inset: 0; pointer-events: none;
+    background:
+        radial-gradient(circle at 30% 20%, rgba(255,215,0,0.1) 0%, transparent 40%),
+        radial-gradient(circle at 70% 80%, rgba(255,215,0,0.08) 0%, transparent 40%);
 }
-
-.role-team {
-    display: inline-block;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: bold;
+.result-content {
+    position: relative; z-index: 5;
+    max-width: 1000px; margin: 0 auto;
+    padding: 30px 20px;
+    display: flex; flex-direction: column; align-items: center;
+}
+.result-header {
+    width: 100%; display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 20px;
 }
-
-.sheep-card .role-team {
-    background: #1976D2;
-    color: white;
+.game-duration { color: rgba(255,255,255,0.7); font-size: 14px; }
+.result-icon-btn {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; padding: 8px 16px; border-radius: 20px;
+    cursor: pointer; font-size: 13px;
+}
+.victory-title { text-align: center; margin-bottom: 25px; }
+.crown { font-size: 48px; margin-bottom: 5px; }
+.win-text {
+    font-size: 64px; font-weight: 900; color: #FFD54F;
+    text-shadow: 0 0 30px rgba(255,213,79,0.5), 0 4px 8px rgba(0,0,0,0.5);
+    margin-bottom: 10px;
+}
+.win-team {
+    color: #FF8A65; font-size: 18px; font-weight: bold;
+    background: rgba(0,0,0,0.3); padding: 8px 30px; border-radius: 20px;
+    display: inline-block;
 }
 
-.wolf-card .role-team {
-    background: #D32F2F;
-    color: white;
+.result-scoreboard {
+    display: flex; gap: 15px; width: 100%; margin-bottom: 25px;
+}
+.team-side { flex: 1; }
+.team-side.wolf-side .team-score-header { background: linear-gradient(90deg, #C62828, #EF5350); }
+.team-side.sheep-side .team-score-header { background: linear-gradient(90deg, #1565C0, #42A5F5); }
+.team-score-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 15px; border-radius: 15px 15px 0 0;
+    color: #fff; font-size: 16px; font-weight: bold;
+}
+.score-num { font-size: 28px; }
+.team-players {
+    background: rgba(0,0,0,0.4); border-radius: 0 0 15px 15px;
+    padding: 10px; display: flex; flex-direction: column; gap: 8px;
+    border: 1px solid rgba(255,255,255,0.1); border-top: none;
+}
+.result-player {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px; border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+}
+.result-player-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #FFCC80, #FF8A65);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; border: 2px solid rgba(255,255,255,0.3);
+}
+.result-player-name { color: #fff; font-size: 14px; font-weight: bold; flex: 1; }
+.result-player-stats { color: rgba(255,255,255,0.7); font-size: 13px; display: flex; gap: 10px; }
+.result-player-like { color: #FFD54F; font-size: 18px; cursor: pointer; }
+.mvp-tag {
+    background: linear-gradient(135deg, #FFD54F, #FF8F00);
+    color: #5D4037; padding: 2px 8px; border-radius: 8px;
+    font-size: 11px; font-weight: bold; margin-left: 5px;
 }
 
-.role-abilities {
-    text-align: left;
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px 0;
+.personal-stats {
+    width: 280px; flex-shrink: 0;
+    background: rgba(0,0,0,0.4); border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 20px; text-align: center;
+}
+.stats-title { color: #fff; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
+.stats-avatar {
+    width: 70px; height: 70px; border-radius: 50%;
+    background: linear-gradient(135deg, #FFCC80, #FF8A65);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px; margin: 0 auto 10px;
+    border: 3px solid #FFD54F; box-shadow: 0 0 20px rgba(255,213,79,0.3);
+}
+.stats-name { color: #FFD54F; font-size: 16px; font-weight: bold; margin-bottom: 15px; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat-item { text-align: center; }
+.stat-label { color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 4px; }
+.stat-value { color: #FFD54F; font-size: 22px; font-weight: bold; }
+
+.rewards {
+    background: rgba(0,0,0,0.4); border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 20px 40px; text-align: center; margin-bottom: 25px;
+}
+.reward-title { color: #fff; font-size: 16px; font-weight: bold; margin-bottom: 15px; }
+.reward-items { display: flex; gap: 40px; justify-content: center; }
+.reward-item { display: flex; align-items: center; gap: 8px; }
+.reward-icon { font-size: 28px; }
+.reward-value { color: #FFD54F; font-size: 18px; font-weight: bold; }
+
+.result-buttons { display: flex; gap: 20px; }
+.btn-result {
+    padding: 14px 40px; border-radius: 25px;
+    font-size: 16px; font-weight: bold; cursor: pointer;
+    border: none; transition: all 0.2s;
+}
+.btn-gray {
+    background: linear-gradient(180deg, #607D8B, #455A64);
+    color: #fff; border: 2px solid rgba(255,255,255,0.2);
+}
+.btn-gold {
+    background: linear-gradient(180deg, #FFD54F, #FF8F00);
+    color: #5D4037; border: 2px solid #FFECB3;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2), 0 6px 15px rgba(0,0,0,0.2);
+}
+.btn-gold:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,0.2); }
+.btn-result:hover { transform: translateY(-2px); }
+
+/* ==================== 3. 身份选择界面 ==================== */
+#screen-role-select {
+    background: linear-gradient(180deg, #1a237e 0%, #311b92 50%, #4a148c 100%);
+}
+#screen-role-select.active {
+    display: flex; align-items: center; justify-content: center;
+}
+.role-select-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(255,215,0,0.1) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(255,87,34,0.08) 0%, transparent 40%);
+}
+.role-select-panel {
+    position: relative; z-index: 5;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(15px);
+    border: 2px solid rgba(255,255,255,0.2); border-radius: 25px;
+    padding: 40px; max-width: 900px; width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.role-select-title {
+    color: #fff; font-size: 32px; font-weight: bold;
+    margin-bottom: 30px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+.role-cards-container {
+    display: flex; gap: 30px; justify-content: center; margin-bottom: 30px;
+}
+.role-select-card {
+    flex: 1; max-width: 380px;
+    background: rgba(255,255,255,0.1); border-radius: 20px;
+    border: 3px solid transparent; padding: 30px;
+    cursor: pointer; transition: all 0.3s;
+    position: relative; overflow: hidden;
+}
+.role-select-card:hover { transform: translateY(-5px); }
+.role-select-card.selected { border-color: #FFD54F; box-shadow: 0 0 30px rgba(255,213,79,0.3); }
+.sheep-select { background: linear-gradient(135deg, rgba(33,150,243,0.2), rgba(25,118,210,0.3)); }
+.sheep-select.selected { border-color: #2196F3; box-shadow: 0 0 30px rgba(33,150,243,0.4); }
+.wolf-select { background: linear-gradient(135deg, rgba(244,67,54,0.2), rgba(198,40,40,0.3)); }
+.wolf-select.selected { border-color: #F44336; box-shadow: 0 0 30px rgba(244,67,54,0.4); }
+.role-select-icon { font-size: 80px; margin-bottom: 15px; }
+.role-select-name { color: #fff; font-size: 28px; font-weight: bold; margin-bottom: 10px; }
+.role-select-team { display: inline-block; padding: 5px 20px; border-radius: 20px; font-size: 14px; font-weight: bold; margin-bottom: 20px; }
+.team-blue { background: #2196F3; color: #fff; }
+.team-red { background: #F44336; color: #fff; }
+.role-select-abilities { text-align: left; list-style: none; padding: 0; margin: 0 0 20px 0; }
+.role-select-abilities li { padding: 8px 0; font-size: 14px; color: rgba(255,255,255,0.85); }
+.role-select-tip { font-size: 13px; color: rgba(255,255,255,0.6); font-style: italic; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 10px; }
+.btn-confirm-role {
+    padding: 16px 80px; border-radius: 35px; border: none;
+    background: linear-gradient(180deg, #FFD54F, #FF8F00);
+    color: #5D4037; font-size: 22px; font-weight: bold;
+    cursor: pointer; box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+    transition: all 0.2s;
+}
+.btn-confirm-role:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-confirm-role:not(:disabled):hover { transform: translateY(-2px); }
+.btn-confirm-role:not(:disabled):active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
+
+/* 操作提示 */
+.action-hints {
+    position: absolute; bottom: 130px; left: 20px; z-index: 100;
+    display: flex; flex-direction: column; gap: 8px;
+}
+.action-hint {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 10px;
+    padding: 8px 14px; color: #fff; font-size: 13px;
+}
+.hint-key {
+    width: 28px; height: 28px; border-radius: 6px;
+    background: linear-gradient(180deg, #FFD54F, #FF8F00);
+    color: #5D4037; font-size: 14px; font-weight: bold;
+    display: flex; align-items: center; justify-content: center;
 }
 
-.role-abilities li {
-    padding: 8px 0;
-    font-size: 14px;
-    color: #555;
+/* 被关押提示 */
+.jail-overlay {
+    position: absolute; inset: 0; z-index: 200;
+    background: radial-gradient(circle, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.85) 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+}
+.jail-title {
+    color: #FFD54F; font-size: 48px; font-weight: 900;
+    text-shadow: 0 0 20px rgba(255,213,79,0.5);
+    margin-bottom: 10px;
+}
+.jail-sub {
+    color: rgba(255,255,255,0.8); font-size: 18px;
 }
 
-.role-tip {
-    font-size: 13px;
-    color: #888;
-    font-style: italic;
-    padding: 10px;
-    background: rgba(255,255,255,0.5);
-    border-radius: 8px;
+/* 救援进度条（按住型） */
+.rescue-hold-bar {
+    position: absolute; bottom: 130px; left: 50%; transform: translateX(-50%);
+    z-index: 200; width: 350px; max-width: 80%;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.3); border-radius: 15px;
+    padding: 12px 20px;
+}
+.rescue-hold-label { color: #fff; font-size: 14px; margin-bottom: 8px; text-align: center; }
+.rescue-hold-bg {
+    height: 14px; background: rgba(255,255,255,0.2); border-radius: 7px; overflow: hidden;
+}
+.rescue-hold-fill {
+    height: 100%; background: linear-gradient(90deg, #42A5F5, #1976D2);
+    border-radius: 7px; transition: width 0.05s linear;
+    box-shadow: 0 0 10px rgba(66,165,245,0.5);
+}
+.rescue-hold-time { color: #fff; font-size: 13px; margin-top: 6px; text-align: center; }
+
+/* 变身提示 */
+.transform-overlay {
+    position: absolute; inset: 0; z-index: 300;
+    background: radial-gradient(circle, rgba(183,28,28,0.4) 0%, rgba(0,0,0,0.9) 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    animation: transformIn 0.5s ease-out;
+}
+@keyframes transformIn {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+.transform-title {
+    color: #F44336; font-size: 52px; font-weight: 900;
+    text-shadow: 0 0 30px rgba(244,67,54,0.5);
+    margin-bottom: 15px;
+}
+.transform-sub { color: rgba(255,255,255,0.8); font-size: 20px; }
+
+/* 运送提示 */
+.carry-hint {
+    position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+    z-index: 200;
+    background: rgba(244,67,54,0.8); backdrop-filter: blur(8px);
+    border: 2px solid rgba(255,255,255,0.3); border-radius: 20px;
+    padding: 12px 30px;
+    animation: carryPulse 1s infinite;
+}
+@keyframes carryPulse {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.05); }
+}
+.carry-text { color: #fff; font-size: 16px; font-weight: bold; }
+
+/* 监狱提示 */
+.prison-hint {
+    position: absolute; top: 60%; left: 50%; transform: translateX(-50%);
+    z-index: 200; display: flex; align-items: center; gap: 10px;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.3); border-radius: 15px;
+    padding: 10px 20px; animation: prisonPulse 1.5s infinite;
+}
+@keyframes prisonPulse {
+    0%, 100% { opacity: 0.8; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+}
+.prison-hint-key {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: linear-gradient(180deg, #FFD54F, #FF8F00);
+    color: #5D4037; font-size: 18px; font-weight: bold;
+    display: flex; align-items: center; justify-content: center;
+}
+.prison-hint-text { color: #fff; font-size: 16px; font-weight: bold; }
+
+/* ==================== 通用弹窗 ==================== */
+.modal {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(0,0,0,0.7);
+    display: flex; align-items: center; justify-content: center;
+}
+.modal-content {
+    background: linear-gradient(180deg, #37474F, #263238);
+    border-radius: 20px; border: 2px solid rgba(255,255,255,0.2);
+    padding: 20px; max-width: 400px; width: 90%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+.modal-header {
+    color: #fff; font-size: 18px; font-weight: bold;
+    text-align: center; margin-bottom: 15px;
+}
+.modal-close {
+    width: 100%; padding: 12px;
+    background: linear-gradient(180deg, #607D8B, #455A64);
+    border: none; border-radius: 12px; color: #fff;
+    font-size: 15px; font-weight: bold; cursor: pointer;
+    margin-top: 15px;
 }
 
-#confirmRoleBtn {
-    padding: 15px 50px;
-    font-size: 18px;
+.chat-modal { max-height: 80vh; display: flex; flex-direction: column; }
+.chat-messages {
+    flex: 1; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 8px;
+    margin-bottom: 15px; max-height: 200px;
 }
-
-#confirmRoleBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.chat-msg {
+    background: rgba(255,255,255,0.1); border-radius: 10px;
+    padding: 8px 12px; color: #fff; font-size: 13px;
 }
+.chat-msg-name { color: #FFD54F; font-weight: bold; margin-right: 5px; }
+.chat-presets { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.chat-preset {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; padding: 10px; border-radius: 10px;
+    cursor: pointer; font-size: 13px; text-align: center;
+    transition: all 0.2s;
+}
+.chat-preset:hover { background: rgba(255,255,255,0.2); }
 
-/* 响应式调整 */
+/* Toast提示 */
+.toast {
+    position: fixed; top: 100px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.8); color: #fff;
+    padding: 12px 30px; border-radius: 25px;
+    font-size: 14px; z-index: 1000; opacity: 0;
+    transition: opacity 0.3s; pointer-events: none;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.toast.show { opacity: 1; }
+
+/* 响应式 */
 @media (max-width: 768px) {
-    .role-cards {
-        flex-direction: column;
-    }
-    
-    .role-card {
-        max-width: 100%;
-    }
-    
-    .role-icon {
-        font-size: 60px;
-    }
-    
-    .role-card h3 {
-        font-size: 24px;
-    }
+    .title-text { font-size: 36px; -webkit-text-stroke: 2px #1565C0; }
+    .room-body { flex-direction: column; }
+    .result-scoreboard { flex-direction: column; }
+    .personal-stats { width: 100%; }
+    .rescue-progress-box { width: 90%; }
 }
